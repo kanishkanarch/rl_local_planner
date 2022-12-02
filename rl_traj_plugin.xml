@@ -1,6 +1,0 @@
-<library path="lib/librl_traj_lib">
-<class name="rl_traj" type="rl_traj" base_class_type="nav_core::BaseLocalPlanner">
-<description>This is a local planner plugin by iroboapp project.</description>
-</class>
-</library>
-

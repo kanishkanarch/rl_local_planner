@@ -142,7 +142,7 @@ include_directories(
 add_executable(respawner_client src/respawn.cpp)
 target_link_libraries(respawner_client ${catkin_LIBRARIES})
 
-add_library(rl_traj_lib src/rl_traj.cpp)
+add_library(rl_local_planner_lib src/rl_local_planner.cpp)
 
 
 #add_dependencies(respawner_client rl_local_planner_gencpp)
