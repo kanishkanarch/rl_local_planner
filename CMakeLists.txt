@@ -8,11 +8,13 @@ project(rl_local_planner)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  nav_core
   geometry_msgs
   nav_msgs
   roscpp
   sensor_msgs
   std_msgs
+  std_srvs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -135,7 +137,15 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rl_local_planner_node.cpp)
+
+
+add_executable(respawner_client src/respawn.cpp)
+target_link_libraries(respawner_client ${catkin_LIBRARIES})
+
+add_library(rl_traj_lib src/rl_traj.cpp)
+
+
+#add_dependencies(respawner_client rl_local_planner_gencpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

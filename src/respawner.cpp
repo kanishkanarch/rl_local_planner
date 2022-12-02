@@ -8,7 +8,7 @@ int main (int argc, char **argv)
 
   ros::init(argc, argv, "respawner");
   ros::NodeHandle nh;
-  ros::Subscriber sub = n.subscribe("odom", 1000, chatterCallback);
+  ros::Subscriber sub = nh.subscribe("odom", 1000, chatterCallback);
   
   std::random_device                  rand_dev;
   std::mt19937                        generator(rand_dev());
@@ -25,6 +25,7 @@ int main (int argc, char **argv)
    start_pose.orientation.z = 0.0;
    start_pose.orientation.w = 0.0;
 
+   ros::ServiceServer server = nh.advertiseService("/gazebo/set_model_state", randomrespawner)
 
    gazebo_msgs::ModelState modelstate;
    modelstate.model_name = (std::string) "turtlebot3_burger";
@@ -34,6 +35,7 @@ int main (int argc, char **argv)
    ros::ServiceClient client = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
    gazebo_msgs::SetModelState setmodelstate;
    setmodelstate.request.model_state = modelstate;     
+
    
    return 0;
 }
