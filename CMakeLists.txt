@@ -138,11 +138,12 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 
+add_library(rl_local_planner_lib src/rl_local_planner.cpp)
 
 add_executable(respawner_client src/respawn.cpp)
 target_link_libraries(respawner_client ${catkin_LIBRARIES})
 
-add_library(rl_local_planner_lib src/rl_local_planner.cpp)
+
 
 
 #add_dependencies(respawner_client rl_local_planner_gencpp)
