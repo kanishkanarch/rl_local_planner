@@ -11,11 +11,21 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 	namespace rl_local_planner_ns{
 		rl_local_planner::rl_local_planner() 
 		{
-			initialize();
+			odom_sub = nh.subscribe("/odom", 1, &rl_local_planner::odom_callback, this);
+			scan_sub = nh.subscribe("/scan", 1, &rl_local_planner::scan_callback, this);
+			respawner = nh.serviceClient<std_srvs::Empty>("/gazebo/reset_simulation");
+//			while (ros::ok())
+//			{
+//				respawner.call(srv_data);
+//				ros::spinOnce();
+//				sleep(5000);
+//				loop_rate.sleep();
+
+//			}
 		}
 
-               
-               rl_local_planner::~rl_local_planner() {}
+
+		rl_local_planner::~rl_local_planner() {}
 		bool rl_local_planner::computeVelocityCommands(geometry_msgs::Twist &cmd_vel)
 		{
 			cmd_vel.linear.x=0.1;
@@ -28,11 +38,18 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 		}
 		bool rl_local_planner::isGoalReached()
 		{
-		  return false;
+			return false;
 		}
 		bool rl_local_planner::setPlan(const std::vector<geometry_msgs::PoseStamped> &plan)
 		{ return true;
 		}
-		
-		
+		void rl_local_planner::odom_callback(const nav_msgs::Odometry odom_msg)
+		{
+			odom = odom_msg;
+		}
+		void rl_local_planner::scan_callback(const sensor_msgs::LaserScan scan_msg)
+		{
+			scan = scan_msg;
+		}
+
 	};

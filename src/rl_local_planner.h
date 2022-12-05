@@ -1,9 +1,10 @@
 #ifndef RL_LOCAL_PLANNER_H
 #define RL_LOCAL_PLANNER_H
-#include <ros/ros.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
 #include <std_srvs/Empty.h>
+#include <unistd.h>
+#include <ros/ros.h>
 #include <nav_core/base_local_planner.h>
 #include <pluginlib/class_list_macros.h>
 #include <costmap_2d/costmap_2d_ros.h>
@@ -22,9 +23,10 @@ namespace rl_local_planner_ns{
 			ros::NodeHandle nh;
 			ros::Subscriber odom_sub;
 			ros::Subscriber scan_sub;
-			ros::ServiceClient respawner;
 			nav_msgs::Odometry odom;
 			sensor_msgs::LaserScan scan;
+			ros::ServiceClient respawner;
+			std_srvs::Empty srv_data;
 			void odom_callback(const nav_msgs::Odometry odom_msg);
 			void scan_callback(const sensor_msgs::LaserScan scan_msg);
 			bool computeVelocityCommands(geometry_msgs::Twist &cmd_vel);
