@@ -1,10 +1,5 @@
 #include "rl_local_planner.h"
 #include <pluginlib/class_list_macros.h>
-#include <tf/tf.h>
-#include <geometry_msgs/Twist.h>
-#include <costmap_2d/costmap_2d_ros.h>
-#include <tf2_ros/buffer.h>
-#include <base_local_planner/costmap_model.h>
 
 PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLocalPlanner)
 
@@ -15,6 +10,14 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 			scan_sub = nh.subscribe("/scan", 1, &rl_local_planner::scan_callback, this);
 			imu_sub = nh.subscribe("/imu", 1, &rl_local_planner::imu_callback, this);
 			respawner = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
+			respawner_data.model_name = "turtlebot3_burger";
+			respawner_data.pose.position.x = -2.0;
+			respawner_data.pose.position.y = -0.5;
+			respawner_data.pose.orientation.w = 1.0;
+			respawner_srv.request.model_state = respawner_data;
+			respawner.call(respawner_srv);
+			time_prev = time(0);
+			time_now = time(0);
 		}
 
 
@@ -51,12 +54,12 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 
 		void rl_local_planner::imu_callback(const sensor_msgs::Imu imu_msg)
 		{
-			while (ros::ok())
+			time_now = time(0);
+			if (time_now - time_prev > 5)
 			{
 				respawner.call(respawner_srv);
-				ros::spinOnce();
-				sleep(5000);
-
+				time_prev = time(0);
+				time_now = time(0);
 			}
 		}
 

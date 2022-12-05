@@ -1,12 +1,10 @@
 #ifndef RL_LOCAL_PLANNER_H
 #define RL_LOCAL_PLANNER_H
-#include <string.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/Imu.h>
 #include <gazebo_msgs/SetModelState.h>
-#include <gazebo_msgs/ModelState.h>
-#include <unistd.h>
+#include <ctime>
 #include <ros/ros.h>
 #include <nav_core/base_local_planner.h>
 #include <pluginlib/class_list_macros.h>
@@ -36,11 +34,8 @@ namespace rl_local_planner_ns{
 			ros::ServiceClient respawner;
 			gazebo_msgs::SetModelState respawner_srv;
 			gazebo_msgs::ModelState respawner_data;
-			respawner_data.model_name = "turtlebot3_burger";
-			respawner_data.pose.position.x = -2.0;
-			respawner_data.pose.position.y = -0.5;
-			respawner_data.pose.orientation.w = 1.0;
-			respawner_srv.request.model_state = respawner_data;
+			time_t time_prev;
+			time_t time_now;
 			void odom_callback(const nav_msgs::Odometry odom_msg);
 			void scan_callback(const sensor_msgs::LaserScan scan_msg);
 			void imu_callback(const sensor_msgs::Imu imu_msg);
