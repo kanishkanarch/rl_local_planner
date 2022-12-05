@@ -13,15 +13,8 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 		{
 			odom_sub = nh.subscribe("/odom", 1, &rl_local_planner::odom_callback, this);
 			scan_sub = nh.subscribe("/scan", 1, &rl_local_planner::scan_callback, this);
-			respawner = nh.serviceClient<std_srvs::Empty>("/gazebo/reset_simulation");
-//			while (ros::ok())
-//			{
-//				respawner.call(srv_data);
-//				ros::spinOnce();
-//				sleep(5000);
-//				loop_rate.sleep();
-
-//			}
+			imu_sub = nh.subscribe("/imu", 1, &rl_local_planner::imu_callback, this);
+			respawner = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
 		}
 
 
@@ -36,20 +29,35 @@ PLUGINLIB_EXPORT_CLASS(rl_local_planner_ns::rl_local_planner, nav_core::BaseLoca
 		void rl_local_planner::initialize(std::string name, tf2_ros::Buffer *tf, costmap_2d::Costmap2DROS *costmap_ros)
 		{
 		}
+
 		bool rl_local_planner::isGoalReached()
 		{
 			return false;
 		}
+
 		bool rl_local_planner::setPlan(const std::vector<geometry_msgs::PoseStamped> &plan)
 		{ return true;
 		}
+
 		void rl_local_planner::odom_callback(const nav_msgs::Odometry odom_msg)
 		{
 			odom = odom_msg;
 		}
+
 		void rl_local_planner::scan_callback(const sensor_msgs::LaserScan scan_msg)
 		{
 			scan = scan_msg;
+		}
+
+		void rl_local_planner::imu_callback(const sensor_msgs::Imu imu_msg)
+		{
+			while (ros::ok())
+			{
+				respawner.call(respawner_srv);
+				ros::spinOnce();
+				sleep(5000);
+
+			}
 		}
 
 	};
