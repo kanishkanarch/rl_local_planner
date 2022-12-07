@@ -2,7 +2,6 @@
 #define RL_LOCAL_PLANNER_H
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-#include <sensor_msgs/Imu.h>
 #include <gazebo_msgs/SetModelState.h>
 #include <ctime>
 #include <ros/ros.h>
@@ -28,7 +27,6 @@ namespace rl_local_planner_ns{
 			ros::NodeHandle nh;
 			ros::Subscriber odom_sub;
 			ros::Subscriber scan_sub;
-			ros::Subscriber imu_sub;
 			nav_msgs::Odometry odom;
 			sensor_msgs::LaserScan scan;
 			ros::ServiceClient respawner;
@@ -38,7 +36,6 @@ namespace rl_local_planner_ns{
 			time_t time_now;
 			void odom_callback(const nav_msgs::Odometry odom_msg);
 			void scan_callback(const sensor_msgs::LaserScan scan_msg);
-			void imu_callback(const sensor_msgs::Imu imu_msg);
 	};
 };
 #endif
